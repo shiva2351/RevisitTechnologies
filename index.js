@@ -2,23 +2,16 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 const { open } = require("sqlite");
-const sqlite3 = require("sqlite3").verbose();;
+const sqlite3 = require("sqlite3");
 const path = require("path");
 const dbpath = path.join(__dirname, "database.db");
 console.log(dbpath);
-const bcrypt = require('bcrypt');
-const cors = require("cors");
-app.use(cors());
-
 let db = null;
 const initilizeDBandServer = async () => {
   try {
     db = await open({ filename: dbpath, driver: sqlite3.Database });
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-      console.log(`Server is running at http://localhost:${PORT}`);
-      const {k}={k:"g"}
-    console.log(k)
+    app.listen(3000, () => {
+      console.log("Server is running at http://localhost:3000");
     });
   } catch (e) {
     console.log(`DB Error : ${e.message}`);
@@ -28,4 +21,19 @@ const initilizeDBandServer = async () => {
 initilizeDBandServer();
 
 
- 
+
+app.get(`/user`, async (req, res) => {
+  try {
+    console.log("Fetching user data...");
+    const {name}=req.query;
+    console.log(name);
+    const getQuery = `SELECT user_name, password FROM users_data WHERE ${name}=users_data.user_name;`;  
+    
+    const result = await db.all(getQuery);  
+      
+    
+    res.json(result); 
+  } catch (error) {
+    console.log("Error :", error.message);
+    res.status(500).json({ error: "error" }); 
+  }});
