@@ -7,6 +7,9 @@ const path = require("path");
 const dbpath = path.join(__dirname, "database.db");
 console.log(dbpath);
 const bcrypt = require('bcrypt');
+const cors = require("cors");
+app.use(cors());
+
 let db = null;
 const initilizeDBandServer = async () => {
   try {
