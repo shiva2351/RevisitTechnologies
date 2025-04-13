@@ -25,13 +25,14 @@ initilizeDBandServer();
 app.get(`/user`, async (req, res) => {
   try {
     console.log("Fetching user data...");
-    const {name}=req.query;
-    console.log(name);
-    const getQuery = `SELECT user_name, password FROM users_data WHERE ${name}=users_data.user_name;`;  
+//const {name}=req.query;
+    //console.log(name);
+    console.log("get")
+    const getQuery = `SELECT username, password FROM users;`;  
     
     const result = await db.all(getQuery);  
       
-    
+    console.log(result)
     res.json(result); 
   } catch (error) {
     console.log("Error :", error.message);
